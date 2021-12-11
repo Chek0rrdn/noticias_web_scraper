@@ -1,0 +1,6 @@
+news_sites:
+  fox: 
+    url: https://www.foxsports.com.mx
+
+  marca:
+    url: https://www.marca.com/claro-mx/
