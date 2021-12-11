@@ -31,7 +31,6 @@ def _new_scraper(news_sites_uid):
         if articulo:
             logger.info('Articulo recuperado!!!\n')
             articulos.append(articulo)
-            break
     
     _save_articles(news_sites_uid, articulos)
 

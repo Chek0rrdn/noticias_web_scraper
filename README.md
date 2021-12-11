@@ -2,7 +2,7 @@
 
 ## Introducción
 
-El siguiente proyecto sirve para descargar noticias de artículos de manera automatica de diferentes páginas mediante una URL.
+El siguiente proyecto sirve para descargar noticias de artículos de una manera automática de diferentes páginas de noticas vía URL.
 
 ## Instalación
 
