@@ -1,5 +1,9 @@
 import argparse
 import logging
+import re
+
+from requests.exceptions import HTTPError
+from urllib3.exceptions import MaxRetryError
 
 import news_page_object as news
 from common import config
@@ -7,6 +11,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 logger = logging.getLogger(__name__)
+link_bien_formado = re.compile(r'^https?://.+/+$')
+es_ruta_raiz = re.compile(r'^/.+$')
 
 
 def _new_scraper(news_sites_uid):
@@ -15,8 +21,45 @@ def _new_scraper(news_sites_uid):
     logging.info(f'Empezando el scrapping para {host}')
     homepage = news.HomePage(news_sites_uid, host)
 
+    articulos = []
     for link in homepage.article_links:
-        print(link)
+        # print(link)
+        articulo = _fetch_article(news_sites_uid, host, link)
+
+        if articulo:
+            logger.info('Articulo recuperado!!!\n')
+            articulos.append(articulo)
+            print(articulo.title)
+    
+    print(len(articulos))
+
+
+def _build_link(host, link):
+    if link_bien_formado.match(link):
+        return link
+    elif es_ruta_raiz.match(link):
+        return f'{host}{link}'
+    else:
+        return f'{host}/{link}'
+
+
+def _fetch_article(news_sites_uid, host, link):
+    logger.info(f'Empezamos a recuperar los enlaces validos en {link}')
+
+    articulo = None
+
+    try:
+        articulo = news.ArticlePage(news_sites_uid, _build_link(host, link))
+
+    except(HTTPError, MaxRetryError) as e:
+        logger.warning('Error mientras recuperamos el articulo\n', exc_info=False)
+
+    if articulo and not articulo.body:
+        logger.warning('Articulo invalido, no hay cuerpo en el articulo\n')
+        return None
+    
+    return articulo
+
 
 
 if __name__ == '__main__':
