@@ -1,4 +1,6 @@
 import argparse
+import csv
+import datetime
 import logging
 import re
 
@@ -29,9 +31,24 @@ def _new_scraper(news_sites_uid):
         if articulo:
             logger.info('Articulo recuperado!!!\n')
             articulos.append(articulo)
-            print(articulo.title)
+            break
     
-    print(len(articulos))
+    _save_articles(news_sites_uid, articulos)
+
+
+def _save_articles(news_sites_uid, articles):
+    now = datetime.datetime.now().strftime('%Y_%m_%d')
+    archivo_salida = f'{news_sites_uid}_{now}_articulos.csv'
+    cabeceras_csv = list(filter(lambda property: not property.startswith('_'), dir(articles[0])))
+    
+
+    with open(f'./files/{archivo_salida}', mode='w+') as f:
+        writer = csv.writer(f)
+        writer.writerow(cabeceras_csv)
+
+        for article in articles:
+            row = [ str(getattr(article, prop)) for prop in cabeceras_csv]
+            writer.writerow(row)
 
 
 def _build_link(host, link):
