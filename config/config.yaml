@@ -1,30 +1,31 @@
 news_sites:
-  fox: 
+  foxsports: 
     url: https://www.foxsports.com.mx
     queries:
       homepage_article_links: '.entry-title a'
-      article_body: ''
-      article_title: ''
+      article_title: '.entry-header h1'
+      article_body: '.entry-content'
 
 
   marca:
     url: https://www.marca.com/claro-mx/
     queries:
       homepage_article_links: '.flex-article__heading a'
-      article_body: ''
-      article_title: ''
+      article_title: '.ue-l-article__header-content h1'
+      article_body: '.ue-c-article__body'
 
 
   eluniversal:
     url: http://www.eluniversal.com.mx
     queries:
       homepage_article_links: '.field-content a'
-      article_body: '.field-name-body'
       article_title: '.pane-content h1'
+      article_body: '.field-name-body'
   
-  elpais:
-    url: https://elpais.com/mexico/
+
+  eltiempo:
+    url: http://www.eltiempo.com
     queries:
-      homepage_article_links: '.c_t a'
-      article_body: ''
-      article_title: ''
+      homepage_article_links: '.title-container a'
+      article_title: '.titulo-principal-bk h1'
+      article_body: '.modulos'
