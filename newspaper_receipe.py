@@ -28,8 +28,12 @@ def main(archivo):
     df = _remove_new_lines_from_body(df)
     df = _tokenize_column(df, 'title')
     df = _tokenize_column(df, 'body')
+    df = _remove_duplicate_entries(df, 'title')
+    df = _drops_rows_with_missing_values(df)
+    _save_data(df, filename=archivo)
 
     return df
+
 
 
 ##Funciones que hacen la transformacion automatizada
@@ -105,7 +109,7 @@ def _remove_new_lines_from_body(df):
 
 
 def _tokenize_column(df, column_name):
-    logger.info('Calculating the number of unique tokens in {}'.format(column_name))
+    logger.info(f'Calculando la cantidad de tokens únicos en {column_name}')
     stop_words = set(stopwords.words('spanish'))
 
     n_tokens =  (
@@ -121,6 +125,28 @@ def _tokenize_column(df, column_name):
     df['n_tokens_' + column_name] = n_tokens
 
     return df
+
+
+def _remove_duplicate_entries(df, column_name):
+    logger.info('Removiendo las entradas duplicadas')
+    df.drop_duplicates(
+        subset = [column_name],
+        keep = 'first',
+        inplace = True
+    )
+
+    return df
+
+
+def _drops_rows_with_missing_values(df):
+    logger.info('Eliminando las filas donde no hay valores')
+    return df.dropna()
+
+
+def _save_data(df, filename):
+    clean_filename = f'clean_{filename}'
+    logger.info(f'Guardando la informacin en {clean_filename}')
+    df.to_csv(clean_filename)
 
 
 
