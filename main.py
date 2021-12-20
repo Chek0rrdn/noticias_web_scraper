@@ -9,7 +9,7 @@ from requests.exceptions import HTTPError
 from urllib3.exceptions import MaxRetryError
 
 import news_page_object as news
-from common import config
+from common import *
 logging.basicConfig(level=logging.INFO)
 
 
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 link_bien_formado = re.compile(r'^https?://.+/+$')
 es_ruta_raiz = re.compile(r'^/.+$')
 
-
+@tiempo_de_ejecucion
 def _new_scraper(news_sites_uid):
     host = config()['news_sites'][news_sites_uid]['url']
 
@@ -40,7 +40,7 @@ def _save_articles(news_sites_uid, articles):
     now = datetime.datetime.now().strftime('%Y_%m_%d')
     archivo_salida = f'{news_sites_uid}_{now}_articulos.csv'
     cabeceras_csv = list(filter(lambda property: not property.startswith('_'), dir(articles[0])))
-    
+
     if not os.path.isdir('files'):
         os.mkdir('files')
     with open(f'./files/{archivo_salida}', mode='w+') as f:
@@ -93,5 +93,4 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-
     _new_scraper(args.news_sites)

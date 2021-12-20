@@ -35,6 +35,7 @@ class NewsPage:
 class HomePage(NewsPage):
 
     def __init__(self, news_site_id, url):
+        self._url = url
         super().__init__(news_site_id, url)
 
 
@@ -52,6 +53,7 @@ class HomePage(NewsPage):
 class ArticlePage(NewsPage):
 
     def __init__(self, news_site_id, url):
+        self._url = url
         super().__init__(news_site_id, url)
     
     @property
@@ -60,9 +62,12 @@ class ArticlePage(NewsPage):
 
         return resultado[0].text if len(resultado) else ''
 
-
     @property
     def title(self):
         resultado = self._select(self._queries['article_title'])
 
         return resultado[0].text if len(resultado) else ''
+    
+    @property
+    def url(self):
+        return self._url
