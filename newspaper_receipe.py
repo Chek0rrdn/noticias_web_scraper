@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 def main(archivo):
     logger.info('Empezando el proceso de Limpieza del Archivo')
 
+    archivo = archivo.split('/')[1]
+
     df = _read_data(archivo)
     newspaper_uid = _extract_newspaper_uid(archivo)
     df = _add_newspaper_uid_column(df, newspaper_uid)
@@ -37,14 +39,16 @@ def main(archivo):
 
 
 ##Funciones que hacen la transformacion automatizada
-def _read_data(archivo):
-    logger.info(f'Leyendo el archivo {archivo}')
-    return pd.read_csv(archivo)
+def _read_data(filename):
+    logger.info(f'Leyendo el archivo {filename}')
+    ruta = f"./files/{filename}"
+    # return pd.read_csv(archivo)
+    return pd.read_csv(ruta)
 
 
-def _extract_newspaper_uid(archivo):
+def _extract_newspaper_uid(filename):
     logger.info('Extrayendo el Newspaper_UID del archivo')
-    newspaper_uid = archivo.split('_')[0]
+    newspaper_uid = filename.split('_')[0]
 
     logger.info(f'Newspaper_uid identificado: {newspaper_uid}')
     return newspaper_uid
@@ -146,8 +150,8 @@ def _drops_rows_with_missing_values(df):
 def _save_data(df, filename):
     clean_filename = f'clean_{filename}'
     logger.info(f'Guardando la informacin en {clean_filename}')
-    df.to_csv(clean_filename)
-
+    ruta = f"./files/{clean_filename}"
+    df.to_csv(ruta)
 
 
 if __name__ == '__main__':
