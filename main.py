@@ -8,8 +8,10 @@ import re
 from requests.exceptions import HTTPError
 from urllib3.exceptions import MaxRetryError
 
-import news_page_object as news
-from common import *
+# import news_page_object as news
+# from common import *
+from src import news_page_object as npo
+from src import common as com
 logging.basicConfig(level=logging.INFO)
 
 
@@ -17,12 +19,12 @@ logger = logging.getLogger(__name__)
 link_bien_formado = re.compile(r'^https?://.+/+$')
 es_ruta_raiz = re.compile(r'^/.+$')
 
-@tiempo_de_ejecucion
+@com.tiempo_de_ejecucion
 def _new_scraper(news_sites_uid):
-    host = config()['news_sites'][news_sites_uid]['url']
+    host = com.config()['news_sites'][news_sites_uid]['url']
 
     logging.info(f'Empezando el scrapping para {host}')
-    homepage = news.HomePage(news_sites_uid, host)
+    homepage = npo.HomePage(news_sites_uid, host)
 
     articulos = []
     for link in homepage.article_links:
@@ -37,7 +39,7 @@ def _new_scraper(news_sites_uid):
 
 
 def _save_articles(news_sites_uid, articles):
-    now = datetime.datetime.now().strftime('%Y_%m_%d')
+    now = datetime.datetime.now().strftime('%d_%m_%Y')
     archivo_salida = f'{news_sites_uid}_{now}_articulos.csv'
     cabeceras_csv = list(filter(lambda property: not property.startswith('_'), dir(articles[0])))
 
@@ -67,7 +69,7 @@ def _fetch_article(news_sites_uid, host, link):
     articulo = None
 
     try:
-        articulo = news.ArticlePage(news_sites_uid, _build_link(host, link))
+        articulo = npo.ArticlePage(news_sites_uid, _build_link(host, link))
 
     except(HTTPError, MaxRetryError) as e:
         logger.warning('Error mientras recuperamos el articulo\n', exc_info=False)
@@ -84,7 +86,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
 
-    opciones_de_sitio = list(config()['news_sites'].keys())
+    opciones_de_sitio = list(com.config()['news_sites'].keys())
     parser.add_argument(
         'news_sites',
         help = 'El sitio de noticias que quieres investigar',

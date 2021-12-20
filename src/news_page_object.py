@@ -1,13 +1,12 @@
 import bs4
 import requests
 
-from common import config
-
+from src import common as cm
 
 class NewsPage:
 
     def __init__(self, news_site_id, url):
-        self._config = config()['news_sites'][news_site_id]
+        self._config = cm.config()['news_sites'][news_site_id]
         self._queries = self._config['queries']
 
         self._html = None
