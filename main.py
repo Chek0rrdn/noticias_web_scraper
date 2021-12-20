@@ -2,6 +2,7 @@ import argparse
 import csv
 import datetime
 import logging
+import os
 import re
 
 from requests.exceptions import HTTPError
@@ -40,7 +41,8 @@ def _save_articles(news_sites_uid, articles):
     archivo_salida = f'{news_sites_uid}_{now}_articulos.csv'
     cabeceras_csv = list(filter(lambda property: not property.startswith('_'), dir(articles[0])))
     
-
+    if not os.path.isdir('files'):
+        os.mkdir('files')
     with open(f'./files/{archivo_salida}', mode='w+') as f:
         writer = csv.writer(f)
         writer.writerow(cabeceras_csv)
