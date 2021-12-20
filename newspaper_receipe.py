@@ -42,7 +42,6 @@ def main(archivo):
 def _read_data(filename):
     logger.info(f'Leyendo el archivo {filename}')
     ruta = f"./files/{filename}"
-    # return pd.read_csv(archivo)
     return pd.read_csv(ruta)
 
 
