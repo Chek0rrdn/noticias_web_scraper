@@ -6,15 +6,6 @@ news_sites:
       article_title: '.entry-header h1'
       article_body: '.entry-content'
 
-
-  marca:
-    url: https://www.marca.com/claro-mx/
-    queries:
-      homepage_article_links: '.flex-article__heading a'
-      article_title: '.ue-l-article__header-content h1'
-      article_body: '.ue-c-article__body'
-
-
   eluniversal:
     url: http://www.eluniversal.com.mx
     queries:
@@ -22,10 +13,31 @@ news_sites:
       article_title: '.pane-content h1'
       article_body: '.field-name-body'
   
-
   eltiempo:
     url: http://www.eltiempo.com
     queries:
       homepage_article_links: '.title-container a'
       article_title: '.titulo-principal-bk h1'
       article_body: '.modulos'
+
+  milenio:
+    url: https://www.milenio.com
+    queries:
+      homepage_article_links: '.board-module__a'
+      article_title: '.media-container h1'
+      article_body: '.nd-content-body'
+
+  elfinanciero:
+    url: https://www.elfinanciero.com.mx
+    queries:
+      homepage_article_links: '.primary-font__PrimaryFontStyles-o56yd5-0 a'
+      article_title: '.col-sm-xl-12 h1'
+      article_body: '.default__ArticleBody-xb1qmn-2'
+
+  elregio:
+    url: http://elregio.com
+    queries:
+      homepage_article_links: '.post-title a'
+      article_title: '.post-title'
+      article_body: '.post-content-area'
+  
