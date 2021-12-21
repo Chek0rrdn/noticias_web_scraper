@@ -17,7 +17,7 @@ def main(filename):
     articles = pd.read_csv(filename)
 
     for index, row in articles.iterrows():
-        logger.info(f"Cargando el uid del articulo del {row['uid']} dentro de la BD")
+        logger.info(f"Cargando el articulo de {row['uid']} dentro de la BD")
         article = Article(
             row['uid'],
             row['body'],
