@@ -3,7 +3,6 @@ import hashlib
 import logging
 from urllib.parse import urlparse
 import pandas as pd
-
 import nltk
 from nltk.corpus import stopwords
 # LAS LINEAS DE DEBAJO SE DEBEN EJECUTAR LA PRIMERA VEZ QUE SE EJECUTE EL CODIGO
@@ -11,6 +10,7 @@ from nltk.corpus import stopwords
 # nltk.download('punkt')
 # nltk.download('stopwords')
 
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,8 +18,6 @@ logger = logging.getLogger(__name__)
 
 def main(archivo):
     logger.info('Empezando el proceso de Limpieza del Archivo')
-
-    archivo = archivo.split('/')[1]
 
     df = _read_data(archivo)
     newspaper_uid = _extract_newspaper_uid(archivo)
@@ -41,8 +39,7 @@ def main(archivo):
 ##Funciones que hacen la transformacion automatizada
 def _read_data(filename):
     logger.info(f'Leyendo el archivo {filename}')
-    ruta = f"./files/{filename}"
-    return pd.read_csv(ruta)
+    return pd.read_csv(filename)
 
 
 def _extract_newspaper_uid(filename):
@@ -147,10 +144,8 @@ def _drops_rows_with_missing_values(df):
 
 
 def _save_data(df, filename):
-    clean_filename = f'clean_{filename}'
-    logger.info(f'Guardando la informacin en {clean_filename}')
-    ruta = f"./files/{clean_filename}"
-    df.to_csv(ruta)
+    logger.info(f'Guardando la informacin en _{filename}')
+    df.to_csv(f'clean_{filename}')
 
 
 if __name__ == '__main__':
@@ -158,7 +153,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'archivo',
-        help="Ruta a el archivo con informacion sucia",
+        help="Archivo con la informacion sucia",
         type=str
     )
 

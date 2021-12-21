@@ -2,16 +2,15 @@ import argparse
 import csv
 import datetime
 import logging
-import os
 import re
+import os
 
 from requests.exceptions import HTTPError
 from urllib3.exceptions import MaxRetryError
 
-# import news_page_object as news
-# from common import *
-from src import news_page_object as npo
-from src import common as com
+from news_page_object import *
+from common import *
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -19,12 +18,13 @@ logger = logging.getLogger(__name__)
 link_bien_formado = re.compile(r'^https?://.+/+$')
 es_ruta_raiz = re.compile(r'^/.+$')
 
-@com.tiempo_de_ejecucion
+
+@tiempo_de_ejecucion
 def _new_scraper(news_sites_uid):
-    host = com.config()['news_sites'][news_sites_uid]['url']
+    host = config()['news_sites'][news_sites_uid]['url']
 
     logging.info(f'Empezando el scrapping para {host}')
-    homepage = npo.HomePage(news_sites_uid, host)
+    homepage = HomePage(news_sites_uid, host)
 
     articulos = []
     for link in homepage.article_links:
@@ -43,9 +43,7 @@ def _save_articles(news_sites_uid, articles):
     archivo_salida = f'{news_sites_uid}_{now}_articulos.csv'
     cabeceras_csv = list(filter(lambda property: not property.startswith('_'), dir(articles[0])))
 
-    if not os.path.isdir('files'):
-        os.mkdir('files')
-    with open(f'./files/{archivo_salida}', mode='w+') as f:
+    with open(f'{archivo_salida}', mode='w+') as f:
         writer = csv.writer(f)
         writer.writerow(cabeceras_csv)
 
@@ -69,7 +67,7 @@ def _fetch_article(news_sites_uid, host, link):
     articulo = None
 
     try:
-        articulo = npo.ArticlePage(news_sites_uid, _build_link(host, link))
+        articulo = ArticlePage(news_sites_uid, _build_link(host, link))
 
     except(HTTPError, MaxRetryError) as e:
         logger.warning('Error mientras recuperamos el articulo\n', exc_info=False)
@@ -86,7 +84,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
 
-    opciones_de_sitio = list(com.config()['news_sites'].keys())
+    opciones_de_sitio = list(config()['news_sites'].keys())
     parser.add_argument(
         'news_sites',
         help = 'El sitio de noticias que quieres investigar',
